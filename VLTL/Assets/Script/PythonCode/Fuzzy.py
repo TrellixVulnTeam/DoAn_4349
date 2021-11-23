@@ -210,12 +210,15 @@ powering_ctrl = ctrl.ControlSystem([rule1,rule2,rule3,rule4,rule5,rule6,rule7,ru
                                     ,rulea31,rulea32,rulea33,rulea34,rulea35,rulea36,rulea37,rulea38,rulea39,rulea40,rulea41,rulea42,rulea43,rulea44,rulea45])
 powering= ctrl.ControlSystemSimulation(powering_ctrl)
 
-f = open('F:\DoAn\VLTL\Assets\Data\Data.txt', 'r')
+f = open('F:\WorkSpace\GitHub\DoAn\VLTL\Assets\Data\Data.txt', 'r')
 powering.input['fim'] = int(f.readline())
 powering.input['leg_strength'] = float(f.readline())
 powering.input['hand_strength'] = float(f.readline())
 powering.input['age'] = int(f.readline())
-
+# powering.input['fim'] = 21
+# powering.input['leg_strength'] = 2
+# powering.input['hand_strength'] = 3
+# powering.input['age'] =2
 powering.compute()
 print(int(powering.output['time_hand']))
 print(int(powering.output['hand_level']))

@@ -26,7 +26,7 @@ namespace PathCreation.Examples
            
             if (pathCreator != null)
             {
-                distanceTravelled += ReadArduino.instance.speed* Time.deltaTime;
+                distanceTravelled += (ReadArduino.instance.speed)/2* Time.deltaTime;
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
                 transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
             }

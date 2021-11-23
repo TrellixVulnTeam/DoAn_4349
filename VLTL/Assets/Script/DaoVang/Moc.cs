@@ -1,27 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Moc : MonoBehaviour
 {
-    public float min_Z = -70f, max_Z = 70f;
-    public int rotate_speed = 1;
+    private float min_Z = -70f, max_Z = 70f;
+    public float rotate_speed = 1;
     private float rotate_angle;
 
     public float move_sp = 2f;
 
-    public float max_y = 5f;
+    public float max_y = 6f;
     public float max_x = 9f;
     private Vector3 initial_pos;
 
+ 
     private Transform _Vang;
     private int _Weight;
     private int _Money=0;
     private bool flag;
     public Text Score;
     public List<GameObject> spawnO;
-
+    public static Moc istance;
     public enum PodState
     {
         ROTATION,
@@ -54,11 +56,14 @@ public class Moc : MonoBehaviour
         switch (podState)
         {
             case PodState.ROTATION:
-                if(Input.GetMouseButton(0))
-                {
-                    podState = PodState.SHOOT;
-                }
 
+                if (ReadArduino.instance.data4 != null)
+                {
+                    if (float.Parse(ReadArduino.instance.data4) > 0)
+                    {
+                        podState = PodState.SHOOT;
+                    }
+                }    
                 rotate_angle += rotate_speed;
 
                 if (rotate_angle>max_Z || rotate_angle<min_Z)
@@ -69,13 +74,13 @@ public class Moc : MonoBehaviour
                 break;
 
             case PodState.SHOOT:
-                transform.Translate(Vector3.down * move_sp * Time.deltaTime);
+                transform.Translate(Vector3.down * (float.Parse(ReadArduino.instance.data4)/5) * Time.deltaTime);
                 if (Mathf.Abs(transform.position.x) > max_x || Mathf.Abs(transform.position.y) < max_y)
                     podState = PodState.REWIND;
                 break;
 
             case PodState.REWIND:
-                transform.Translate(Vector3.up *( move_sp-_Weight) * Time.deltaTime);
+                transform.Translate(Vector3.up *(move_sp - _Weight) * Time.deltaTime);
                 if (Mathf.Floor(transform.position.y) == Mathf.Floor(initial_pos.y))
                 {
                     if(_Vang!=null)
@@ -86,9 +91,7 @@ public class Moc : MonoBehaviour
                         AddMoney(_Money);
                         Spawn();
                     }    
-                    
                     transform.position = initial_pos;
-                  
                     podState = PodState.ROTATION;
                 }                    
                 break;
@@ -109,10 +112,8 @@ public class Moc : MonoBehaviour
         toSpawn = spawnO[randomItem];
         pos_x = Random.Range(-8f, 8f);
         pos_y= Random.Range(10f, 5f);
-        print(pos_y);
         pos = new Vector3(pos_x,pos_y, -3.3f);
         Instantiate(toSpawn, pos, Quaternion.identity);
-
     }    
     //void Rotate()
     //{
