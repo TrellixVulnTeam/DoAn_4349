@@ -10,7 +10,7 @@ public class ReadArduino : MonoBehaviour
     // Start is called before the first frame update
     string recived;
     string [] recivedSplit;
-    public string data1, data2, data3, data4, data5, data6;
+    [HideInInspector] public string data1, data2, data3, data4, data5, data6;
     public float speed;
     public static ReadArduino instance;
     SerialPort Sp = new SerialPort("COM3", 115200);
@@ -25,12 +25,13 @@ public class ReadArduino : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(.2f);
             recived = Sp.ReadExisting();
             string[] temp;
             if (recived.Count() > 0)
             {
                 temp = recived.Split('|');
+              
                 if (temp.Count() > 0)
                 {
                     if (temp[0] != "")
@@ -38,15 +39,15 @@ public class ReadArduino : MonoBehaviour
                         string [] temp1 = temp[0].Split(',');
                         if (temp1.Count() > 5)
                         {
-                            if (temp1[2] != "")
+                            if (temp1[0] == "@" && temp1[7] == "#")
                             {
-                                data1 = temp1[0];
-                                data2 = temp1[1];
-                                data3 = temp1[2];
-                                data4 = temp1[3];
-                                data5 = temp1[4];
-                                data6 = temp1[5];
-                                
+                                data1 = temp1[1];
+                                data2 = temp1[2];
+                                data3 = temp1[3];
+                                data4 = temp1[4];
+                                data5 = temp1[5];
+                                data6 = temp1[6];
+                                print(data4);
                             }
                         }
                     }
@@ -57,7 +58,5 @@ public class ReadArduino : MonoBehaviour
     }    
     void Update()
     {
-
-       print(data4);
     }
 }

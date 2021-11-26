@@ -17,11 +17,16 @@ public class displayParam : MonoBehaviour
     public Text Moment;
     public Text Force;
     public static displayParam instance;
-    public Moc moc;
+    //public Moc moc;
     public ReadArduino readArduino;
     bool start = false;
     public Animator warning;
     public Text warningText;
+    public Animator tayQuayD, tayQuayT;
+    public Animator cheoThuyen;
+    public GameObject victory;
+    public GameObject paddle;
+    public ParticleSystem _victory;
     [SerializeField]
     void Start()
     {
@@ -31,6 +36,7 @@ public class displayParam : MonoBehaviour
 
     void Update()
     {
+
         if (start == true)
         {
             if (timeStart > 0)
@@ -41,20 +47,22 @@ public class displayParam : MonoBehaviour
             {
                 timeStart = 0;
             }
-            //displayaTimer(timeStart);
-             //displayparam();
+            displayaTimer(timeStart);
+            displayparam();
             //moc.enabled = true;
-            //readArduino.enabled = true;
-            //if (int.Parse(ReadArduino.instance.data[3]) < 25 )
-            //{
-            //    warningText.text = "Bạn cần tập nhanh hơn!";
-            //    warning.SetTrigger("Start");
-            //}
-            //else
-            //{
-            //    warning.SetTrigger("Stop");
-            //} 
-                
+            if (float.Parse(ReadArduino.instance.data4) > 0)
+            {
+                tayQuayT.SetBool("Start", true);
+                tayQuayT.speed = float.Parse(ReadArduino.instance.data4) / 20;
+                cheoThuyen.SetTrigger("Cheo");
+                cheoThuyen.speed = float.Parse(ReadArduino.instance.data4) / 15;
+            }
+            else
+            {
+                tayQuayT.speed = 0;
+                cheoThuyen.speed = 0;
+            }
+            Warning();
         }
     }
     void displayaTimer(float timeToDisplay)
@@ -66,23 +74,29 @@ public class displayParam : MonoBehaviour
         float mins = Mathf.FloorToInt(timeToDisplay / 60);
         float secs = Mathf.FloorToInt(timeToDisplay % 60);
         time.text = string.Format("{0:00}:{1:00}", mins, secs);
+        if (mins == 0 && secs == 0)
+        {
+            victory.SetActive(true);
+            _victory.Play();
+            readArduino.enabled = false;
+        }
     }
 
     IEnumerator Countdown()
     {
-
         while (timeCountdown > 0)
         {
             countdownText.text = timeCountdown.ToString();
             yield return new WaitForSeconds(1f);
             timeCountdown--;
         }
-        countdownText.text = "GO!";
-        yield return new WaitForSeconds(.5f);
+        countdownText.text = "BẮT ĐẦU!";
+        yield return new WaitForSeconds(3f);
         countdownText.gameObject.SetActive(false);
-        //GetData();
+        GetData();
         yield return new WaitForSeconds(1f);
-        // timeStart = float.Parse(lt_temp) * 60;
+        timeStart = float.Parse(ht_temp) * 60;
+        paddle.SetActive(true);
         start = true;
 
     }
@@ -112,7 +126,25 @@ public class displayParam : MonoBehaviour
     void displayparam()
     {
         Velocity.text = string.Format("Vận tốc(vòng/phút):{0:00}|{1:00}", ReadArduino.instance.data4, "25");
-       // Moment.text = string.Format("Moment(N.m):{0:00}|{1:00}", "40", (float.Parse(hs_temp) /2).ToString());
-        Force.text = string.Format("Trợ lực(%):{0}",((float.Parse(ReadArduino.instance.data5)/ float.Parse(hs_temp))*100).ToString());
+        Moment.text = string.Format("Moment(N.m):{0:00}|{1:00}", ReadArduino.instance.data6, (float.Parse(hs_temp) / 2).ToString());
+        Force.text = string.Format("Trợ lực(%):{0}", ((float.Parse(ReadArduino.instance.data5) / float.Parse(hs_temp)) * 100).ToString());
+    }
+    void Warning()
+    {
+        if (int.Parse(ReadArduino.instance.data4) < 25)
+        {
+            warningText.text = "Bạn cần tập nhanh hơn!";
+            warning.SetBool("Start", true);
+        }
+        if (int.Parse(ReadArduino.instance.data4) > 25  && int.Parse(ReadArduino.instance.data4) < 40)
+        {
+            warning.SetBool("Start", false);
+        }
+        if (int.Parse(ReadArduino.instance.data4) > 40)
+        {
+            warningText.text = "Bạn cần tập chậm hơn!";
+            warning.SetBool("Start", true);
+        }
+
     }
 }

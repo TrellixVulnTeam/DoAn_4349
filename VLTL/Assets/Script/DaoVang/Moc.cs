@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -10,25 +10,27 @@ public class Moc : MonoBehaviour
     public float rotate_speed = 1;
     private float rotate_angle;
 
-    public float move_sp = 2f;
-
+    public float move_sp;
+    float z1, z2;
     public float max_y = 6f;
     public float max_x = 9f;
     private Vector3 initial_pos;
-
- 
     private Transform _Vang;
-    private int _Weight;
+    private int _Weight=0;
     private int _Money=0;
     private bool flag;
     public Text Score;
     public List<GameObject> spawnO;
     public static Moc istance;
+    public GameObject Ins;
+    public Text insText;
+    float t = 0;
     public enum PodState
     {
         ROTATION,
         SHOOT,
-        REWIND
+        REWIND,
+        PREPARE
     }
     PodState podState = PodState.ROTATION;
 
@@ -46,22 +48,21 @@ public class Moc : MonoBehaviour
     {
         initial_pos = transform.position;
         Score.text = "$"+ _Money.ToString();
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-
         switch (podState)
         {
             case PodState.ROTATION:
-
                 if (ReadArduino.instance.data4 != null)
                 {
-                    if (float.Parse(ReadArduino.instance.data4) > 0)
+                    if (float.Parse(ReadArduino.instance.data4) > 0 || Input.GetMouseButtonDown(0))
                     {
-                        podState = PodState.SHOOT;
+                        podState = PodState.PREPARE;
+                        z1 = this.transform.rotation.eulerAngles.z;
+                        
                     }
                 }    
                 rotate_angle += rotate_speed;
@@ -73,14 +74,33 @@ public class Moc : MonoBehaviour
                 transform.rotation = Quaternion.AngleAxis(rotate_angle, Vector3.forward);
                 break;
 
+            case PodState.PREPARE:
+                //print(string.Format("{0} - {1}", z1, z2));
+                if (Mathf.Abs(z1-z2) > 5 || t == 0)
+                {
+
+                    print("2");
+                    podState = PodState.SHOOT;
+                   // Ins.SetActive(false);
+
+                }
+                else
+                {
+                    podState = PodState.ROTATION;
+                    //Ins.SetActive(true);
+                }
+                break;
+
             case PodState.SHOOT:
-                transform.Translate(Vector3.down * (float.Parse(ReadArduino.instance.data4)/5) * Time.deltaTime);
+                t = 1;
+                z2 = z1;
+                transform.Translate((Vector3.down *float.Parse(ReadArduino.instance.data4)/10)* Time.deltaTime);
                 if (Mathf.Abs(transform.position.x) > max_x || Mathf.Abs(transform.position.y) < max_y)
                     podState = PodState.REWIND;
                 break;
 
             case PodState.REWIND:
-                transform.Translate(Vector3.up *(move_sp - _Weight) * Time.deltaTime);
+                    transform.Translate(Vector3.up *((float.Parse(ReadArduino.instance.data4)/_Weight)*5) * Time.deltaTime);
                 if (Mathf.Floor(transform.position.y) == Mathf.Floor(initial_pos.y))
                 {
                     if(_Vang!=null)
@@ -115,64 +135,4 @@ public class Moc : MonoBehaviour
         pos = new Vector3(pos_x,pos_y, -3.3f);
         Instantiate(toSpawn, pos, Quaternion.identity);
     }    
-    //void Rotate()
-    //{
-    //    if (!can_rotate) return;
-    //    if(rotate_right)
-    //    {
-    //        rotate_angle += rotate_speed * Time.deltaTime;
-    //    }
-    //    else
-    //    {
-    //        rotate_angle -= rotate_speed * Time.deltaTime;
-    //    }
-    //    transform.rotation = Quaternion.AngleAxis(rotate_angle, Vector3.forward);
-
-    //    if (rotate_angle >= max_Z )
-    //    {
-    //        rotate_right = false;
-    //    }    
-    //    else if (rotate_angle<=min_Z)
-    //    {
-    //        rotate_right = true;
-    //    }    
-    //}    
-    //void GetInput()
-    //{
-    //    if(Input.GetMouseButton(0))
-    //    {
-    //        if(can_rotate)
-    //        {
-    //            can_rotate = false;
-    //            moveDown = true;
-    //        }    
-    //    }    
-    //}  
-    //void MoveRope()
-    //{
-    //    if (can_rotate) return;
-    //    if (!can_rotate)
-    //    {
-    //        Vector3 temp = transform.position;
-    //        if (moveDown)
-    //        {
-    //            temp -= transform.up * Time.deltaTime*move_sp;
-    //        }
-    //        else
-    //        {
-    //            temp += transform.up * Time.deltaTime*move_sp;
-    //        }
-    //        transform.position = temp;
-    //        if (temp.y <= min_y)
-    //        {
-    //            moveDown = false;
-    //        }
-    //        if (temp.y >= initial_y)
-    //        {
-    //            can_rotate = true;
-    //            move_sp = intial_move_sp;
-    //        }
-    //    }
-    //}    
-
 }

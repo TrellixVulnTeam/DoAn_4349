@@ -1,0 +1,2 @@
+F:\WorkSpace\GitHub\DoAn\VLTL\obj\Debug\PlayFabSDKEditor.csprojAssemblyReference.cache
+F:\WorkSpace\GitHub\DoAn\VLTL\obj\Debug\PlayFabSDKEditor.csproj.CoreCompileInputs.cache

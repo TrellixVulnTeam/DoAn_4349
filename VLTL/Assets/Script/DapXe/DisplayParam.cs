@@ -8,7 +8,7 @@ using PlayFab.ClientModels;
 public class DisplayParam : MonoBehaviour
 {
     string hs_temp, ls_temp, lt_temp, ht_temp;
-    float timeStart=90f;
+    float timeStart;
     public Text time;
     float timeCountdown = 3;
     public Text countdownText;
@@ -20,11 +20,13 @@ public class DisplayParam : MonoBehaviour
     public Animator tayQuayD, tayQuayT;
     public Text warningText;
     public Animator warning;
+    public GameObject victory;
+    public ParticleSystem _victory;
     void Start()
     {
-       instance = this;
-       StartCoroutine(Countdown());
-       
+        instance = this;
+        StartCoroutine(Countdown());
+
     }
 
     void Update()
@@ -39,47 +41,47 @@ public class DisplayParam : MonoBehaviour
             {
                 timeStart = 0;
             }
-            //displayaTimer(timeStart);
+            displayaTimer(timeStart);
             displayParam();
-            tayQuayD.SetTrigger("TQD");
-            tayQuayT.SetTrigger("TQT");
-            if (int.Parse(ReadArduino.instance.data1) < 25)
+            if (float.Parse(ReadArduino.instance.data1) > 0)
             {
-                warningText.text = "Bạn cần tập nhanh hơn!";
-                warning.SetTrigger("Start");
+                tayQuayD.SetBool("Start", true);
+                tayQuayD.speed = float.Parse(ReadArduino.instance.data1) /12;
+                
             }
-            else
-            {
-                warning.SetTrigger("Stop");
-            }
+            else tayQuayD.speed = 0;
+            Warning();
         }
     }
     void displayaTimer(float timeToDisplay)
     {
-        if(timeToDisplay < 0)
+        if (timeToDisplay < 0)
         {
-            timeToDisplay =0;
+            timeToDisplay = 0;
         }
         float mins = Mathf.FloorToInt(timeToDisplay / 60);
         float secs = Mathf.FloorToInt(timeToDisplay % 60);
         time.text = string.Format("{0:00}:{1:00}", mins, secs);
+        if (mins == 0 && secs == 0)
+        {
+            victory.SetActive(true);
+            _victory.Play();
+        }
     }
-  
     IEnumerator Countdown()
     {
-
-        while (timeCountdown >0)
+        while (timeCountdown > 0)
         {
             countdownText.text = timeCountdown.ToString();
             yield return new WaitForSeconds(1f);
             timeCountdown--;
         }
-        countdownText.text = "GO!";
+        countdownText.text = "BẮT ĐẦU!";
         yield return new WaitForSeconds(.5f);
         countdownText.gameObject.SetActive(false);
-        //GetData();
+        GetData();
         yield return new WaitForSeconds(1f);
-       // timeStart = float.Parse(lt_temp) * 60;
+        timeStart = float.Parse(lt_temp) * 60;
         start = true;
 
     }
@@ -108,8 +110,26 @@ public class DisplayParam : MonoBehaviour
 
     void displayParam()
     {
-        Velocity.text = string.Format("Vận tốc(vòng/phút):{0:00}|{1:00}",ReadArduino.instance.data1, "25");
-      //  Moment.text = string.Format("Moment(N.m):{0:00}|{1:00}","40", (float.Parse(ls_temp)*1.5).ToString());
-        //Force.text = string.Format("Trợ lực(%):{0}", ((float.Parse(ReadArduino.instance.data[1]) / float.Parse(hs_temp)) * 100).ToString());
+        Velocity.text = string.Format("Vận tốc(vòng/phút):{0:00}|{1:00}", ReadArduino.instance.data1, "25");
+        Moment.text = string.Format("Moment(N.m):{0:00}|{1:00}", ReadArduino.instance.data3, (float.Parse(ls_temp) * 1.5).ToString());
+        Force.text = string.Format("Trợ lực(%):{0}", ((float.Parse(ReadArduino.instance.data2) / float.Parse(hs_temp)) * 100).ToString());
+    }
+    void Warning()
+    {
+        if (int.Parse(ReadArduino.instance.data1) < 25)
+        {
+            warningText.text = "Bạn cần tập nhanh hơn!";
+            warning.SetBool("Start", true);
+        }
+        if (int.Parse(ReadArduino.instance.data1) > 25 && int.Parse(ReadArduino.instance.data1) < 40)
+        {
+            warning.SetBool("Start", false);
+        }
+        if (int.Parse(ReadArduino.instance.data1) > 40)
+        {
+            warningText.text = "Bạn cần tập chậm hơn!";
+            warning.SetBool("Start", true);
+        }
+
     }
 }

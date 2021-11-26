@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class LoadScene : MonoBehaviour
     }
     public void loadScene2()
     {
-        StartCoroutine(load(2));
+        StartCoroutine(load(3));
     }
 
    IEnumerator load(int index)
