@@ -22,16 +22,14 @@ namespace PathCreation.Examples
                 pathCreator.pathUpdated += OnPathChanged;
             }
             instance = this;
-
         }       
         void Update()
         {
-           
             if (pathCreator != null)
             {
                 float x;
                 bool a = float.TryParse(ReadArduino.instance.data4, out x);
-                if ( a == true) 
+                if ( a == true && (displayParam.instance.start == true|| DisplayParam.instance.start == true)) 
                 {
                     if (y == 3) distanceTravelled += float.Parse(ReadArduino.instance.data4) / 10 * Time.deltaTime;
                     else if (y == 1) distanceTravelled += float.Parse(ReadArduino.instance.data1) / 10 * Time.deltaTime;
@@ -41,7 +39,6 @@ namespace PathCreation.Examples
                
             }
         }
-
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
         // is as close as possible to its position on the old path
         void OnPathChanged() {

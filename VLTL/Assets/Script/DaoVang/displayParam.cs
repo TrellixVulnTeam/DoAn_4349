@@ -19,7 +19,7 @@ public class displayParam : MonoBehaviour
     public static displayParam instance;
     //public Moc moc;
     public ReadArduino readArduino;
-    bool start = false;
+    public bool start = false;
     public Animator warning;
     public Text warningText;
     public Animator tayQuayD, tayQuayT;
@@ -145,6 +145,15 @@ public class displayParam : MonoBehaviour
             warningText.text = "Bạn cần tập chậm hơn!";
             warning.SetBool("Start", true);
         }
-
+        if (int.Parse(ReadArduino.instance.data4) > 40)
+        {
+            warningText.text = "Bạn cần tập chậm hơn!";
+            warning.SetBool("Start", true);
+        }
+        if (int.Parse(ReadArduino.instance.data4) == 27)
+        {
+            warningText.text = "Hãy nâng khuỷu tay lên!";
+            warning.SetBool("Start", true);
+        }
     }
 }

@@ -1,15 +1,29 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO.Ports;
+using System;
 
 public class LoadScene : MonoBehaviour
 {
     public GameObject baiTap;
     public GameObject LT;
     public Animator loader;
+    SerialPort Sp = new SerialPort("COM3", 115200);
+    public Button btn1, btn2;
+    public Text msText;
+    bool open;
+    private void Awake()
+    {
+       
+    }
+    private void Update()
+    {
+        
+    }
     public void loadcans()
     {
         baiTap.SetActive(true);

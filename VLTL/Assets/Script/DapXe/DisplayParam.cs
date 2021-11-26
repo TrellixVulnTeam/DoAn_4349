@@ -16,7 +16,7 @@ public class DisplayParam : MonoBehaviour
     public Text Moment;
     public Text Force;
     public static DisplayParam instance;
-    bool start = false;
+    public bool start = false;
     public Animator tayQuayD, tayQuayT;
     public Text warningText;
     public Animator warning;
