@@ -12,18 +12,10 @@ public class LoadScene : MonoBehaviour
     public GameObject baiTap;
     public GameObject LT;
     public Animator loader;
-    SerialPort Sp = new SerialPort("COM3", 115200);
     public Button btn1, btn2;
     public Text msText;
-    bool open;
-    private void Awake()
-    {
-       
-    }
-    private void Update()
-    {
-        
-    }
+    string[] ports = SerialPort.GetPortNames();
+    SerialPort Sp = new SerialPort();
     public void loadcans()
     {
         baiTap.SetActive(true);
@@ -32,11 +24,41 @@ public class LoadScene : MonoBehaviour
     }
     public void loadScene1 ()
     {
-        StartCoroutine(load(1));
+        try
+        {
+            Sp.PortName = ports[0];
+            Sp.BaudRate = 115200;
+            Sp.Open();
+            msText.text="";
+        }
+        catch (Exception ex)
+        {
+            msText.text = "Vui lòng kết nối với thiết bị tập!";
+        }
+        if (Sp.IsOpen)
+        {
+            StartCoroutine(load(1));
+            Sp.Close();
+        }
     }
     public void loadScene2()
     {
-        StartCoroutine(load(3));
+        try
+        {
+            Sp.PortName = ports[0];
+            Sp.BaudRate = 115200;
+            Sp.Open();
+            msText.text = "";
+        }
+        catch (Exception ex)
+        {
+            msText.text = "Vui lòng kết nối với thiết bị tập!"; Debug.Log("sdasd");
+        }
+        if (Sp.IsOpen)
+        {
+            StartCoroutine(load(3));
+            Sp.Close();
+        }
     }
 
    IEnumerator load(int index)

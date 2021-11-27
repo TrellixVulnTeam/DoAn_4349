@@ -205,7 +205,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9485522}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 650112903}
+        m_TargetAssemblyTypeName: PaintScript, Assembly-CSharp
+        m_MethodName: btn6
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &9485522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5696,7 +5708,7 @@ PrefabInstance:
     - target: {fileID: 2667385763539136808, guid: 7499fad2b4af36840bad309d056af36f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8831128508573733886, guid: 7499fad2b4af36840bad309d056af36f,
         type: 3}
@@ -7961,7 +7973,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 22.235}
+  m_AnchoredPosition: {x: 0, y: 22.234985}
   m_SizeDelta: {x: 0.0001, y: -343.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1987854624
@@ -8389,7 +8401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2063359510
 RectTransform:
   m_ObjectHideFlags: 0

@@ -28,15 +28,35 @@ namespace PathCreation.Examples
             if (pathCreator != null)
             {
                 float x;
-                bool a = float.TryParse(ReadArduino.instance.data4, out x);
-                if ( a == true && (displayParam.instance.start == true|| DisplayParam.instance.start == true)) 
+                if (y == 3)
                 {
-                    if (y == 3) distanceTravelled += float.Parse(ReadArduino.instance.data4) / 10 * Time.deltaTime;
-                    else if (y == 1) distanceTravelled += float.Parse(ReadArduino.instance.data1) / 10 * Time.deltaTime;
-                    transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
-                    transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
+                    if ((displayParam.instance.start == true || displayParam.instance.Isread ==true ))
+                    {
+                        bool a = float.TryParse(ReadArduino.instance.data4, out x);
+                        if (a == true)
+                        {
+                            distanceTravelled += float.Parse(ReadArduino.instance.data4) / 10 * Time.deltaTime;
+                            transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
+                            transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
+                        }
+                    }
                 }
-               
+                else if (y == 1)
+                {
+                    if ((DisplayParam.instance.start == true) && DisplayParam.instance.Isread==true)
+                    {
+                        bool a = float.TryParse(ReadArduino.instance.data1, out x);
+                        if (a == true)
+                        {
+                            distanceTravelled += float.Parse(ReadArduino.instance.data1) / 10 * Time.deltaTime;
+                            transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
+                            transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
+                        }
+                    }
+                }
+
+
+
             }
         }
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path

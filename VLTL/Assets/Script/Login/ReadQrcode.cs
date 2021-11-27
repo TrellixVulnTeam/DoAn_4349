@@ -27,10 +27,14 @@ public class ReadQrcode : MonoBehaviour
     string st;
     void Start()
     {
+       
+        isLoading = false;
         read = false;
         devices = WebCamTexture.devices;
         screenRect = new Rect(450, 150, 1000, 800);
-        webCamTexture = new WebCamTexture(devices[1].name);
+        webCamTexture = new WebCamTexture(devices[0].name);
+        for (int i = 0; i < devices.Length; i++)
+            Debug.Log(devices[i].name);
         webCamTexture.requestedHeight = 900;
         webCamTexture.requestedWidth = 450;
 
@@ -47,10 +51,9 @@ public class ReadQrcode : MonoBehaviour
     }
     public void qrcode()
     {
-       
         if (webCamTexture != null)
         {
-            webCamTexture.deviceName = devices[1].name; 
+            webCamTexture.deviceName = devices[0].name; 
             webCamTexture.Play();
             read = true;
         }
@@ -67,13 +70,19 @@ public class ReadQrcode : MonoBehaviour
                 {
                     recived = result.Text;
                     StartCoroutine(Loadding());
-                    LoginButton();
                     read = false;
                 }
             }
             catch (Exception ex) { Debug.LogWarning(ex.Message); }
         }
-
+    }
+    IEnumerator Loadding()
+    {
+        isLoading = true;
+        loading.SetTrigger("Start");
+        yield return new WaitForSeconds(2f);
+        LoginButton();
+        Debug.Log(isLoading);
     }
     public void LoginButton()
     {
@@ -86,6 +95,7 @@ public class ReadQrcode : MonoBehaviour
     }
     void OnLoginSuccess(LoginResult result)
     {
+        if (webCamTexture.isPlaying) webCamTexture.Stop();
         islogin = true;
         GetData();
     }
@@ -102,20 +112,22 @@ public class ReadQrcode : MonoBehaviour
     }
     public void OndataRecieved(GetUserDataResult result)
     {
-        if (result.Data == null || !result.Data.ContainsKey("FIM"))
+        Debug.Log(isLoading);
+        if (isLoading)
         {
+
+            if (result.Data == null || !result.Data.ContainsKey("FIM"))
+            {
                 profile.SetActive(true);
                 login.SetActive(false);
-        }
-        else
-        {
+            }
+            else
+            {
                 painSurvey.SetActive(true);
-                login.SetActive(false);  
+                login.SetActive(false);
+            }
         }
+        
     }
-    IEnumerator Loadding()
-    {
-        loading.SetTrigger("Start");
-        yield return new WaitForSeconds(2f);
-    }
+   
 }

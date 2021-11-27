@@ -71,6 +71,10 @@ public class PaintScript : MonoBehaviour
         ht = int.Parse(ht_temp) - 5;
         savePaint();
     }
+    public void btn6()
+    {
+        savePaint();
+    }
 
 
     public void savePaint()

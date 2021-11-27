@@ -322,6 +322,9 @@
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.4.6\Unity.Burst.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="zxing.unity">
+      <HintPath>Assets\Plugin\zxing.unity.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>Library\PackageCache\com.unity.analytics@3.3.5\Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
@@ -330,9 +333,6 @@
     </Reference>
     <Reference Include="Grpc.Core">
       <HintPath>Library\PackageCache\com.unity.ml-agents@1.0.7\Plugins\ProtoBuffer\Grpc.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.unity">
-      <HintPath>Assets\Plugin\zxing.unity.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
