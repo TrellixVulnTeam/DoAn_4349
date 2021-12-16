@@ -25,12 +25,13 @@ namespace PathCreation.Examples
         }       
         void Update()
         {
+           
             if (pathCreator != null)
             {
                 float x;
                 if (y == 3)
                 {
-                    if ((displayParam.instance.start == true || displayParam.instance.Isread ==true ))
+                    if ((displayParam.instance.start == true && displayParam.instance.Isread ==true ))
                     {
                         bool a = float.TryParse(ReadArduino.instance.data4, out x);
                         if (a == true)
@@ -43,7 +44,7 @@ namespace PathCreation.Examples
                 }
                 else if (y == 1)
                 {
-                    if ((DisplayParam.instance.start == true) && DisplayParam.instance.Isread==true)
+                    if (DisplayParam.instance.start == true && DisplayParam.instance.Isread == true)
                     {
                         bool a = float.TryParse(ReadArduino.instance.data1, out x);
                         if (a == true)

@@ -40,7 +40,6 @@ public class ReadArduino : MonoBehaviour
                 if (recived.Count() > 0)
                 {
                     temp = recived.Split('|');
-
                     if (temp.Count() > 0)
                     {
                         if (temp[0] != "")
@@ -56,23 +55,23 @@ public class ReadArduino : MonoBehaviour
                                     data4 = temp1[4];
                                     data5 = temp1[5];
                                     data6 = temp1[6];
-                                    print(data4);
+                                    print(data1);
                                 }
                             }
                         }
                     }
                 }
             }
-            if (y==1)
+            if (y == 1)
             {
                 if (DisplayParam.instance.Isclose == true) Sp.Close();
             }
-            else if(y==3)
+            else if (y == 3)
             {
                 if (displayParam.instance.Isclose == true) Sp.Close();
             }
-            
-        }        
+
+        }
     }    
     void Update()
     {

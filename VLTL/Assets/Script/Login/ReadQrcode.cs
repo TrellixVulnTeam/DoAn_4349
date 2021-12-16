@@ -31,7 +31,7 @@ public class ReadQrcode : MonoBehaviour
         isLoading = false;
         read = false;
         devices = WebCamTexture.devices;
-        screenRect = new Rect(450, 150, 1000, 800);
+        screenRect = new Rect(250, 50, Screen.width-500, Screen.height - 500);
         webCamTexture = new WebCamTexture(devices[0].name);
         for (int i = 0; i < devices.Length; i++)
             Debug.Log(devices[i].name);
@@ -45,8 +45,8 @@ public class ReadQrcode : MonoBehaviour
         {
             GUI.DrawTexture(screenRect, webCamTexture, ScaleMode.ScaleToFit);
             msText.text = "";
-            QrText.text = "Di chuyển mã Qr đến vùng camera";
-        }    
+            QrText.text = "Move the Qr code to the camera area";
+        }   
        
     }
     public void qrcode()
@@ -79,7 +79,7 @@ public class ReadQrcode : MonoBehaviour
     IEnumerator Loadding()
     {
         isLoading = true;
-        loading.SetTrigger("Start");
+        //loading.SetTrigger("Start");
         yield return new WaitForSeconds(2f);
         LoginButton();
         Debug.Log(isLoading);

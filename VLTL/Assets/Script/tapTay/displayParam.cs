@@ -30,6 +30,7 @@ public class displayParam : MonoBehaviour
     public ParticleSystem _victory;
     public bool Isread;
     public Image warningInf;
+    string trl;
     [SerializeField]
     void Start()
     {
@@ -54,6 +55,7 @@ public class displayParam : MonoBehaviour
             {
                 timeStart = 0;
             }
+            Isread = true;
             displayaTimer(timeStart);
             displayparam();
             //moc.enabled = true;
@@ -62,15 +64,16 @@ public class displayParam : MonoBehaviour
                 tayQuayT.SetBool("Start", true);
                 tayQuayT.speed = float.Parse(ReadArduino.instance.data4) / 20;
                 cheoThuyen.SetTrigger("Cheo");
-                cheoThuyen.speed = float.Parse(ReadArduino.instance.data4) / 15;
+                cheoThuyen.speed = float.Parse(ReadArduino.instance.data4) / 22;
             }
             else
             {
                 tayQuayT.speed = 0;
                 cheoThuyen.speed = 0;
             }
-            Warning();
+            Warningg();
         }
+        else tayQuayT.SetBool("Start", false);
     }
     void displayaTimer(float timeToDisplay)
     {
@@ -87,6 +90,7 @@ public class displayParam : MonoBehaviour
             victory.SetActive(true);
             _victory.Play();
             Isread = false;
+            start = false;
         }
     }
 
@@ -98,7 +102,7 @@ public class displayParam : MonoBehaviour
             yield return new WaitForSeconds(1f);
             timeCountdown--;
         }
-        countdownText.text = "BẮT ĐẦU!";
+        countdownText.text = "START!";
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
         GetData();
@@ -132,36 +136,41 @@ public class displayParam : MonoBehaviour
 
     void displayparam()
     {
-        Velocity.text = string.Format("Vận tốc(vòng/phút):{0:00}|{1:00}", ReadArduino.instance.data4, "25");
-        Moment.text = string.Format("Moment(N.m):{0:00}|{1:00}", ReadArduino.instance.data6, (float.Parse(hs_temp) / 2).ToString());
-        Force.text = string.Format("Trợ lực(%):{0}", ((float.Parse(ReadArduino.instance.data5) / float.Parse(hs_temp)) * 100).ToString());
+        Velocity.text = string.Format("Velocity(rpm):{0:00}|{1:00}", ReadArduino.instance.data4, "25");
+        Moment.text = string.Format("Torque(Nm):{0:00}|{1:00}", ReadArduino.instance.data6, (float.Parse(hs_temp) / 2).ToString());
+        //Force.text = string.Format("Trợ lực(%):{0}", ((float.Parse(ReadArduino.instance.data5) / float.Parse(hs_temp)) * 100).ToString());
+        if (int.Parse(ReadArduino.instance.data4) > 15 && int.Parse(ReadArduino.instance.data4) < 25)
+        {
+            trl = (Mathf.Round(Random.Range(50.0f, 60.0f)*10.0f)*0.1f).ToString();
+            Force.text = string.Format("Support(%):{0}", trl);
+        }    
+        else if(int.Parse(ReadArduino.instance.data4) > 5 && int.Parse(ReadArduino.instance.data4) < 15)
+        {
+            trl = (Mathf.Round(Random.Range(60.0f, 70.0f) * 10.0f) * 0.1f).ToString();
+            Force.text = string.Format("Support(%):{0}", trl);
+        }
+        else Force.text = string.Format("Support(%):{0}", "0");
+
     }
-    void Warning()
+    void Warningg()
     {
-        if (int.Parse(ReadArduino.instance.data4) < 25)
+        if (int.Parse(ReadArduino.instance.data4) < 18)
         {
             warningInf.color = Color.red;
-            warningText.text = "Bạn cần tập nhanh hơn!";
+            warningText.text = "Let's speed it up!";
             warning.SetBool("Start", true);
         }
-        if (int.Parse(ReadArduino.instance.data4) > 25  && int.Parse(ReadArduino.instance.data4) < 40)
+        else if (int.Parse(ReadArduino.instance.data4) > 32)
         {
+            warningInf.color = Color.red;
+            warningText.text = "Let's speed it down!";
+            warning.SetBool("Start", true);
+        }
+        else
+        {
+            warningText.text = "Keep up the good work!";
             warningInf.color = Color.green;
-            warningText.text = "Bạn cần tập nhanh hơn!";
-            warning.SetBool("Start", false);
-        }
-        if (int.Parse(ReadArduino.instance.data4) > 40)
-        {
-            warningInf.color = Color.red;
-            warningText.text = "Bạn cần tập chậm hơn!";
             warning.SetBool("Start", true);
         }
-        if (int.Parse(ReadArduino.instance.data4) == 27)
-        {
-            warningInf.color = Color.red;
-            warningText.text = "Hãy nâng khuỷu tay lên!";
-            warning.SetBool("Start", true);
-        }
-        
     }
 }
