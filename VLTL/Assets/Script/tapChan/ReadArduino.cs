@@ -5,13 +5,13 @@ using System.IO.Ports;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class ReadArduino : MonoBehaviour
 {
     // Start is called before the first frame update
     string recived;
-    string [] recivedSplit;
-    [HideInInspector] public string data1, data2, data3, data4, data5, data6;
+    [HideInInspector] public string data1, data2, data3, data4, data5, data6, data7, data8;
     public float speed;
     public static ReadArduino instance;
     int y;
@@ -26,6 +26,7 @@ public class ReadArduino : MonoBehaviour
         instance = this;
         StartCoroutine(readData());
         y = SceneManager.GetActiveScene().buildIndex;
+        
     }
     // Update is called once per frame
     IEnumerator readData()
@@ -45,9 +46,9 @@ public class ReadArduino : MonoBehaviour
                         if (temp[0] != "")
                         {
                             string[] temp1 = temp[0].Split(',');
-                            if (temp1.Count() == 8)
+                            if (temp1.Count() == 10)
                             {
-                                if (temp1[0] == "@" && temp1[7] == "#")
+                                if (temp1[0] == "@" && temp1[9] == "#")
                                 {
                                     data1 = temp1[1];
                                     data2 = temp1[2];
@@ -55,21 +56,32 @@ public class ReadArduino : MonoBehaviour
                                     data4 = temp1[4];
                                     data5 = temp1[5];
                                     data6 = temp1[6];
-                                    print(data1);
+                                    data7 = temp1[7];
+                                    data8 = temp1[8];
+                                    Debug.Log(data7);
+                                    string[] names = new string[] { data7, data8};
+                                    using (StreamWriter sw = new StreamWriter(@"F:\WorkSpace\GitHub\DoAn\VLTL\Assets\Data\DataAngle.txt"))
+                                    {
+
+                                        foreach (string s in names)
+                                        {
+                                            sw.WriteLine(s);
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            if (y == 1)
-            {
-                if (DisplayParam.instance.Isclose == true) Sp.Close();
-            }
-            else if (y == 3)
-            {
-                if (displayParam.instance.Isclose == true) Sp.Close();
-            }
+            //if (y == 1)
+            //{
+            //    if (DisplayParam.instance.Isclose == true) Sp.Close();
+            //}
+            //else if (y == 3)
+            //{
+            //    if (displayParam.instance.Isclose == true) Sp.Close();
+            //}
 
         }
     }    
